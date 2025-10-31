@@ -1,0 +1,31 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+commit_msg_file=$1
+
+# ANSI color codes for nicer messages
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+echo "${YELLOW}✍️  Checking commit message format...${NC}"
+
+# Regex for Conventional Commits: type(scope?): message
+# Allowed types: feat, fix, chore, docs, refactor, style, test
+regex="^(feat|fix|chore|docs|refactor|style|test)(\([a-z0-9\-]+\))?: .+"
+
+if ! grep -qE "$regex" "$commit_msg_file"; then
+  echo -e "${RED}❌ Invalid commit message format!${NC}"
+  echo "Your commit message must follow Conventional Commits:"
+  echo "  type(scope?): message"
+  echo "  Allowed types: feat, fix, chore, docs, refactor, style, test"
+  echo "  Scope is optional, lowercase, and hyphen-separated if used"
+  echo "Examples:"
+  echo "  feat(auth): add login endpoint"
+  echo "  fix(ui): button hover color"
+  echo "  chore: update dependencies"
+  exit 1
+fi
+
+echo -e "${GREEN}✅ Commit message format is valid!${NC}"
