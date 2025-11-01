@@ -3,6 +3,16 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  async redirects() {
+    // Redirect from root to /workflows
+    return [
+      {
+        source: "/",
+        destination: "/workflows",
+        permanent: true,
+      },
+    ];
+  },
   reactCompiler: true,
 };
 
