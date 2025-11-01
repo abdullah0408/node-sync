@@ -2,6 +2,8 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { env } from "@/lib/env";
 import prisma from "@/lib/prisma";
+import { polarClient } from "@/lib/polar";
+import { checkout, polar, portal } from "@polar-sh/better-auth";
 
 /**
  * Better Auth configuration for this Next.js app.
@@ -36,4 +38,23 @@ export const auth = betterAuth({
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     },
   },
+  plugins: [
+    polar({
+      client: polarClient,
+      createCustomerOnSignUp: true,
+      use: [
+        checkout({
+          products: [
+            {
+              productId: "ec02b405-48dc-4406-a11c-955861a153df",
+              slug: "node-sync-pro",
+            },
+          ],
+          successUrl: env.POLAR_SUCCESS_URL,
+          authenticatedUsersOnly: true,
+        }),
+        portal(),
+      ],
+    }),
+  ],
 });
