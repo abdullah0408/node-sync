@@ -1,4 +1,8 @@
+import { realtimeMiddleware } from "@inngest/realtime/middleware";
 import { Inngest } from "inngest";
 
 // Create a client to send and receive events
-export const inngest = new Inngest({ id: "node-sync" });
+export const inngest = new Inngest({
+  id: "nexusflow",
+  middleware: [realtimeMiddleware()],
+});
