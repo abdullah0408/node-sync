@@ -1,5 +1,6 @@
 import { NodeType } from "@/generated/prisma/enums";
 import { InitialNode } from "@/modules/editor/components/initial-node";
+import { GeminiNode } from "@/modules/executions/components/gemini/node";
 import { HttpRequestNode } from "@/modules/executions/components/http-request/node";
 import { GoogleFormNode } from "@/modules/triggers/components/google-form-trigger/node";
 import { ManualTriggerNode } from "@/modules/triggers/components/manual-trigger/node";
@@ -10,6 +11,7 @@ export const nodeComponents = {
   [NodeType.HTTP_REQUEST]: HttpRequestNode,
   [NodeType.MANUAL_TRIGGER]: ManualTriggerNode,
   [NodeType.GOOGLE_FORM_TRIGGER]: GoogleFormNode,
+  [NodeType.GEMINI]: GeminiNode,
 } as const satisfies NodeTypes;
 
 export type RegisteredNodeTypes = keyof typeof nodeComponents;

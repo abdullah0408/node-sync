@@ -13,6 +13,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string().min(5),
     POLAR_ACCESS_TOKEN: z.string().min(5),
     POLAR_SUCCESS_URL: z.url(),
+    GOOGLE_GENERATIVE_AI_API_KEY: z.string().min(5),
   },
   client: {
     NEXT_PUBLIC_BASE_URL: z.url(), // Public values safe for client
