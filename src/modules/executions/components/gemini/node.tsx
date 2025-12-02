@@ -12,6 +12,7 @@ type GeminiModel = (typeof AVAILABLE_MODELS)[number];
 
 type GeminiNodeData = {
   variableName?: string;
+  credentialId?: string;
   model?: GeminiModel;
   systemPrompt?: string;
   userPrompt?: string;
