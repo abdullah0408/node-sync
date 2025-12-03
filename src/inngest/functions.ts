@@ -8,6 +8,8 @@ import { HttpReqestChannel } from "./channels/http-request";
 import { ManualTriggerChannel } from "./channels/mannual-triggers";
 import { GoogleFormTriggerChannel } from "./channels/google-from-trigger";
 import { GeminiChannel } from "./channels/gemini";
+import { DiscordChannel } from "./channels/discord";
+import { SlackChannel } from "./channels/slack";
 
 export const executeWorkflow = inngest.createFunction(
   {
@@ -21,6 +23,8 @@ export const executeWorkflow = inngest.createFunction(
       ManualTriggerChannel(),
       GoogleFormTriggerChannel(),
       GeminiChannel(),
+      DiscordChannel(),
+      SlackChannel(),
     ],
   },
   async ({ event, step, publish }) => {
@@ -43,6 +47,18 @@ export const executeWorkflow = inngest.createFunction(
 
       return topologicalSort(workflow.nodes, workflow.connections);
     });
+
+    const userId = await step.run("find-user-id", async () => {
+      const workflow = await prisma.workflow.findUniqueOrThrow({
+        where: { id: workflowId },
+        select: {
+          userId: true,
+        },
+      });
+
+      return workflow.userId;
+    });
+
     // Initialize the context with any initial data from the trigger
     let context = event.data.initialData || {};
 
@@ -52,6 +68,7 @@ export const executeWorkflow = inngest.createFunction(
       context = await executor({
         data: node.data as Record<string, unknown>,
         nodeId: node.id,
+        userId,
         context,
         step,
         publish,

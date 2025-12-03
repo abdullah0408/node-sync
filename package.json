@@ -79,6 +79,7 @@
     "embla-carousel-react": "^8.6.0",
     "eslint-config-prettier": "^10.1.8",
     "handlebars": "^4.7.8",
+    "html-entities": "^2.6.0",
     "husky": "^9.1.7",
     "inngest": "^3.44.4",
     "input-otp": "^1.4.2",
