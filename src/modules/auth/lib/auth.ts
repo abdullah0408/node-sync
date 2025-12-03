@@ -33,10 +33,6 @@ export const auth = betterAuth({
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
     },
-    google: {
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
-    },
   },
   plugins: [
     polar({
@@ -46,8 +42,8 @@ export const auth = betterAuth({
         checkout({
           products: [
             {
-              productId: "ec02b405-48dc-4406-a11c-955861a153df",
-              slug: "node-sync-pro",
+              productId: env.POLAR_PRODUCT_ID,
+              slug: env.POLAR_PRODUCT_SLUG,
             },
           ],
           successUrl: env.POLAR_SUCCESS_URL,

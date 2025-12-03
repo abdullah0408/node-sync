@@ -25,6 +25,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/modules/auth/lib/auth-client";
 import { Spinner } from "@/components/ui/spinner";
+import { GithubIcon } from "lucide-react";
+import { useState } from "react";
 
 const signInFormSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -35,6 +37,8 @@ type SignInFormValues = z.infer<typeof signInFormSchema>;
 
 export function SignInForm() {
   const router = useRouter();
+
+  const [socialSignInIsPending, setSocialSignInIsPending] = useState(false);
 
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInFormSchema),
@@ -64,6 +68,29 @@ export function SignInForm() {
     );
   };
 
+  const onSocialSignIn = async (provider: "github") => {
+    setSocialSignInIsPending(true);
+    await authClient.signIn.social(
+      {
+        provider,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
+          setSocialSignInIsPending(false);
+          router.push("/");
+        },
+        onError: (ctx) => {
+          setSocialSignInIsPending(false);
+          toast.error(
+            ctx?.error?.message ||
+              "Failed to sign in with GitHub. Please try again."
+          );
+        },
+      }
+    );
+  };
+
   const isPending = form.formState.isSubmitting;
 
   return (
@@ -77,6 +104,24 @@ export function SignInForm() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid gap-6">
+                <div className="flex flex-col gap-4">
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    type="button"
+                    disabled={isPending || socialSignInIsPending}
+                    onClick={() => onSocialSignIn("github")}
+                  >
+                    {socialSignInIsPending ? (
+                      <>
+                        <Spinner className="size-4" />
+                      </>
+                    ) : (
+                      <GithubIcon className="size-4" />
+                    )}
+                    Continue with Github
+                  </Button>
+                </div>
                 <div className="grid gap-6">
                   <FormField
                     control={form.control}
@@ -112,7 +157,11 @@ export function SignInForm() {
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full" disabled={isPending}>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isPending || socialSignInIsPending}
+                  >
                     {isPending ? (
                       <>
                         <Spinner className="size-4" />
