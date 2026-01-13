@@ -1,11 +1,6 @@
 "use client";
 
-import { createId } from "@paralleldrive/cuid2";
-import { useReactFlow } from "@xyflow/react";
-import { GlobeIcon, MousePointerIcon } from "lucide-react";
-import { useCallback } from "react";
-import { toast } from "sonner";
-import { NodeType } from "@/generated/prisma/enums";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -14,7 +9,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
+import { NodeType } from "@/generated/prisma/enums";
+import { createId } from "@paralleldrive/cuid2";
+import { useReactFlow } from "@xyflow/react";
+import { GlobeIcon, MousePointerIcon } from "lucide-react";
+import { useCallback } from "react";
+import { toast } from "sonner";
 
 export type NodeTypeOption = {
   type: NodeType;
@@ -47,9 +47,21 @@ const executionNodes: NodeTypeOption[] = [
     icon: GlobeIcon,
   },
   {
+    type: NodeType.OPENAI,
+    label: "OpenAI",
+    description: "Use OpenAI GPT models to generate text",
+    icon: "/openai.svg",
+  },
+  {
+    type: NodeType.ANTHROPIC,
+    label: "Anthropic",
+    description: "Use Anthropic Claude models to generate text",
+    icon: "/anthropic.svg",
+  },
+  {
     type: NodeType.GEMINI,
     label: "Gemini",
-    description: "Use google gemini to generate text",
+    description: "Use Google Gemini to generate text",
     icon: "/gemini.svg",
   },
   {
